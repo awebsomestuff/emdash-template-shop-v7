@@ -1,0 +1,18 @@
+---
+import Base from "../layouts/Base.astro";
+import CartTable from "../components/CartTable.astro";
+---
+<Base title="Cart" description="Your shopping bag at Kin & Stone">
+	<div class="container cart-page">
+		<h1>Shopping bag</h1>
+		<div class="cart-notice">
+			<span>⚠</span>
+			<div>
+				<strong>This is a demo template.</strong>
+				The cart is a preview running entirely in your browser. Connect a real payment provider
+				(Stripe, Snipcart, or Shopify Buy Buttons) to enable checkout.
+			</div>
+		</div>
+		<CartTable />
+	</div>
+</Base>

@@ -1,0 +1,80 @@
+---
+import { getEmDashCollection, getTaxonomyTerms, getSiteSettings } from "emdash";
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import ProductGrid from "../components/ProductGrid.astro";
+import CategoryList from "../components/CategoryList.astro";
+
+const settings = await getSiteSettings();
+const siteTitle = settings?.title || "Kin & Stone";
+const siteTagline = settings?.tagline || "Essential goods, thoughtfully made";
+
+// Fetch enough products to find featured + a hero subject.
+const { entries: allProducts, cacheHint } = await getEmDashCollection("products", {
+	status: "published",
+	limit: 24,
+	orderBy: { published_at: "desc" },
+});
+Astro.cache.set(cacheHint);
+
+const featured = allProducts.filter((p: any) => p.data.is_featured === true).slice(0, 4);
+const featuredGrid = featured.length >= 4 ? featured : allProducts.slice(0, 4);
+const heroProduct = featured[0] || allProducts[0];
+
+// Top-level categories for the showcase grid
+const allTerms = await getTaxonomyTerms("product_category");
+const topCats = (allTerms || []).filter((t: any) => !t.parent).slice(0, 3);
+---
+<Base title={siteTitle} description={siteTagline}>
+	<Hero
+		eyebrow="Spring Edit"
+		title={`Quiet essentials.<br /><em>Made to last.</em>`}
+		copy="Small-batch apparel and home goods designed in Lisbon and made responsibly in Portugal, Japan, and Portugal again."
+		ctaHref="/shop"
+		ctaLabel="Shop new arrivals"
+		image={heroProduct?.data?.featured_image}
+	/>
+
+	<section class="section container">
+		<div class="section-head">
+			<div>
+				<span class="eyebrow">Featured</span>
+				<h2>The edit, this week</h2>
+			</div>
+			<a href="/shop">View all &rarr;</a>
+		</div>
+		<ProductGrid products={featuredGrid} />
+	</section>
+
+	<section class="section container">
+		<div class="section-head">
+			<div>
+				<span class="eyebrow">Shop by category</span>
+				<h2>Built for the everyday</h2>
+			</div>
+			<a href="/shop">Browse all &rarr;</a>
+		</div>
+		<CategoryList categories={topCats.map((t: any) => ({ slug: t.slug, label: t.label }))} />
+	</section>
+
+	<section class="section container">
+		<div class="editorial">
+			<div class="editorial-media fade-in">
+				<img
+					src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=1400&h=1700&fit=crop"
+					alt="Editorial lookbook image"
+					loading="lazy"
+				/>
+			</div>
+			<div class="editorial-copy fade-in">
+				<span class="eyebrow">Studio Notes</span>
+				<h2>A slower approach to making things.</h2>
+				<p>
+					We work with small workshops across Europe and Asia to make fewer, better products
+					in natural fibers and honest materials. Each piece is designed to be kept, not replaced.
+				</p>
+				<a class="btn btn-outline" href="/pages/about">Our story</a>
+			</div>
+		</div>
+	</section>
+</Base>

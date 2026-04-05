@@ -1,0 +1,37 @@
+---
+import { Image } from "emdash/ui";
+
+interface Props {
+	product: any;
+	category?: string | null;
+}
+const { product, category } = Astro.props;
+const data = product.data;
+const hoverImage = data.gallery_1 || data.gallery_2 || null;
+const hasSale = data.compare_at_price && data.compare_at_price !== data.price;
+const soldOut = data.in_stock === false;
+---
+<a href={`/shop/${product.id}`} class="product-card">
+	<div class="product-card-media">
+		{soldOut && <span class="product-card-tag sold-out">Sold out</span>}
+		{!soldOut && hasSale && <span class="product-card-tag sale">Sale</span>}
+		{data.featured_image && (
+			<div class="img-primary">
+				<Image image={data.featured_image} />
+			</div>
+		)}
+		{hoverImage && (
+			<div class="img-hover">
+				<Image image={hoverImage} />
+			</div>
+		)}
+	</div>
+	{category && <div class="product-card-cat">{category}</div>}
+	<h3 class="product-card-title">{data.title}</h3>
+	<div class="product-card-meta">
+		<div>
+			{hasSale && <span class="product-card-compare">{data.compare_at_price}</span>}
+			<span class="product-card-price">{data.price}</span>
+		</div>
+	</div>
+</a>

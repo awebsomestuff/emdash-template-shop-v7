@@ -1,0 +1,31 @@
+---
+import { getEmDashEntry, getSeoMeta, getSiteSettings } from "emdash";
+import { PortableText } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect("/404");
+
+const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
+if (!page) return Astro.redirect("/404");
+Astro.cache.set(cacheHint);
+
+const settings = await getSiteSettings();
+const siteTitle = settings?.title || "Kin & Stone";
+const seo = getSeoMeta(page, { siteTitle, siteUrl: Astro.url.origin, path: `/pages/${slug}` });
+---
+<Base
+	title={seo.title || page.data.title}
+	description={seo.description}
+	content={{ collection: "pages", id: page.data.id, slug }}
+>
+	<div class="container-narrow" style="padding: var(--space-3xl) var(--space-lg)">
+		<header style="margin-bottom: var(--space-2xl); padding-bottom: var(--space-lg); border-bottom: 1px solid var(--color-line);">
+			<span class="eyebrow">Kin & Stone</span>
+			<h1 {...page.edit.title} style="font-size: clamp(2.25rem, 5vw, 3.5rem); margin: 0;">{page.data.title}</h1>
+		</header>
+		<div class="prose" {...page.edit.content}>
+			{page.data.content && <PortableText value={page.data.content} />}
+		</div>
+	</div>
+</Base>

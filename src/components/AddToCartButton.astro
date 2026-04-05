@@ -1,0 +1,73 @@
+---
+interface Props {
+	id: string;
+	title: string;
+	price: string;
+	image?: string | null;
+	disabled?: boolean;
+}
+const { id, title, price, image, disabled } = Astro.props;
+---
+<div class="atc-row">
+	<div class="atc-qty">
+		<button type="button" data-qty="-1" aria-label="Decrease quantity">&minus;</button>
+		<input type="number" id="atc-qty-input" value="1" min="1" max="99" aria-label="Quantity" />
+		<button type="button" data-qty="+1" aria-label="Increase quantity">+</button>
+	</div>
+	<button
+		type="button"
+		class="btn atc-btn"
+		id="atc-btn"
+		data-id={id}
+		data-title={title}
+		data-price={price}
+		data-image={image || ""}
+		aria-disabled={disabled ? "true" : "false"}
+		disabled={disabled}
+	>
+		{disabled ? "Sold out" : "Add to cart"}
+	</button>
+</div>
+<p class="demo-notice">
+	<strong>Demo template.</strong> This button adds items to a local preview cart only. Connect Stripe, Snipcart, or Shopify Buy Buttons to enable real checkout.
+</p>
+
+<script is:inline>
+	(function () {
+		var qtyInput = document.getElementById('atc-qty-input');
+		var btn = document.getElementById('atc-btn');
+		if (!qtyInput || !btn) return;
+
+		document.querySelectorAll('[data-qty]').forEach(function (b) {
+			b.addEventListener('click', function () {
+				var delta = b.getAttribute('data-qty') === '+1' ? 1 : -1;
+				var v = Math.max(1, (parseInt(qtyInput.value, 10) || 1) + delta);
+				qtyInput.value = String(v);
+			});
+		});
+
+		btn.addEventListener('click', function () {
+			if (btn.getAttribute('aria-disabled') === 'true') return;
+			var id = btn.getAttribute('data-id');
+			var title = btn.getAttribute('data-title');
+			var price = btn.getAttribute('data-price');
+			var image = btn.getAttribute('data-image');
+			var qty = parseInt(qtyInput.value, 10) || 1;
+
+			var size = document.querySelector('[data-group="size"][aria-pressed="true"]');
+			var color = document.querySelector('[data-group="color"][aria-pressed="true"]');
+			var variant = [size && size.getAttribute('data-value'), color && color.getAttribute('data-value')]
+				.filter(Boolean).join(' / ');
+
+			var key = id + '::' + variant;
+			var cart = [];
+			try { cart = JSON.parse(localStorage.getItem('kinstone_cart') || '[]'); } catch (e) {}
+			var existing = cart.find(function (i) { return i.key === key; });
+			if (existing) existing.qty += qty;
+			else cart.push({ key: key, id: id, title: title, price: price, image: image, variant: variant, qty: qty });
+			localStorage.setItem('kinstone_cart', JSON.stringify(cart));
+			window.dispatchEvent(new Event('kinstone:cart-change'));
+			if (window.kinstoneToast) window.kinstoneToast('Added to cart — ' + title);
+		});
+	})();
+</script>

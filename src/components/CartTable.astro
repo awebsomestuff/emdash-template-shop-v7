@@ -1,0 +1,120 @@
+---
+// Decorative cart — renders entirely from localStorage on the client.
+---
+<div id="cart-root">
+	<div class="empty-state" id="cart-empty">
+		<h2>Your cart is empty</h2>
+		<p>Explore the shop to find something you love.</p>
+		<a class="btn btn-outline" href="/shop">Continue shopping</a>
+	</div>
+	<div id="cart-filled" hidden>
+		<table class="cart-table">
+			<thead>
+				<tr>
+					<th>Item</th>
+					<th style="text-align:center">Quantity</th>
+					<th style="text-align:right">Price</th>
+					<th style="text-align:right">Total</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody id="cart-body"></tbody>
+		</table>
+
+		<div class="cart-summary">
+			<div class="cart-summary-box">
+				<div class="row"><span>Subtotal</span><span id="cart-subtotal">$0</span></div>
+				<div class="row"><span>Shipping</span><span>Calculated at checkout</span></div>
+				<div class="row total"><span>Total</span><span id="cart-total">$0</span></div>
+				<button class="btn btn-block" style="margin-top: var(--space-md)" aria-disabled="true" disabled>
+					Checkout (Demo only)
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script is:inline>
+	(function () {
+		function parsePrice(s) {
+			if (!s) return 0;
+			var n = parseFloat(String(s).replace(/[^0-9.]/g, ''));
+			return isNaN(n) ? 0 : n;
+		}
+		function fmt(n) { return '$' + n.toFixed(2).replace(/\.00$/, ''); }
+
+		function render() {
+			var cart = [];
+			try { cart = JSON.parse(localStorage.getItem('kinstone_cart') || '[]'); } catch (e) {}
+			var empty = document.getElementById('cart-empty');
+			var filled = document.getElementById('cart-filled');
+			var body = document.getElementById('cart-body');
+			if (!empty || !filled || !body) return;
+
+			if (!cart.length) {
+				empty.hidden = false; filled.hidden = true; return;
+			}
+			empty.hidden = true; filled.hidden = false;
+			body.innerHTML = '';
+			var subtotal = 0;
+			cart.forEach(function (item) {
+				var unit = parsePrice(item.price);
+				var line = unit * (item.qty || 1);
+				subtotal += line;
+				var tr = document.createElement('tr');
+				tr.innerHTML =
+					'<td>' +
+						'<div class="cart-item">' +
+							(item.image ? '<img src="' + item.image + '" alt="" />' : '<div style="width:72px;height:90px;background:var(--color-surface-alt)"></div>') +
+							'<div class="cart-item-info">' +
+								'<strong>' + (item.title || '') + '</strong>' +
+								(item.variant ? '<span>' + item.variant + '</span>' : '') +
+							'</div>' +
+						'</div>' +
+					'</td>' +
+					'<td style="text-align:center">' +
+						'<div class="atc-qty" style="display:inline-flex">' +
+							'<button type="button" data-key="' + item.key + '" data-delta="-1" aria-label="Decrease">&minus;</button>' +
+							'<input type="number" value="' + (item.qty || 1) + '" min="1" readonly aria-label="Quantity" />' +
+							'<button type="button" data-key="' + item.key + '" data-delta="1" aria-label="Increase">+</button>' +
+						'</div>' +
+					'</td>' +
+					'<td class="price">' + (item.price || '') + '</td>' +
+					'<td class="total">' + fmt(line) + '</td>' +
+					'<td style="text-align:right"><button class="cart-remove" data-key="' + item.key + '" data-remove="1">Remove</button></td>';
+				body.appendChild(tr);
+			});
+			var sub = document.getElementById('cart-subtotal');
+			var tot = document.getElementById('cart-total');
+			if (sub) sub.textContent = fmt(subtotal);
+			if (tot) tot.textContent = fmt(subtotal);
+		}
+
+		document.addEventListener('click', function (e) {
+			var t = e.target.closest('[data-key]');
+			if (!t) return;
+			var key = t.getAttribute('data-key');
+			var delta = t.getAttribute('data-delta');
+			var remove = t.getAttribute('data-remove');
+			var cart = [];
+			try { cart = JSON.parse(localStorage.getItem('kinstone_cart') || '[]'); } catch (e) {}
+			if (remove) {
+				cart = cart.filter(function (i) { return i.key !== key; });
+			} else if (delta) {
+				cart.forEach(function (i) {
+					if (i.key === key) i.qty = Math.max(1, (i.qty || 1) + parseInt(delta, 10));
+				});
+			}
+			localStorage.setItem('kinstone_cart', JSON.stringify(cart));
+			window.dispatchEvent(new Event('kinstone:cart-change'));
+			render();
+		});
+
+		window.addEventListener('kinstone:cart-change', render);
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', render);
+		} else {
+			render();
+		}
+	})();
+</script>

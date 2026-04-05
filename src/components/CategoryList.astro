@@ -1,0 +1,23 @@
+---
+interface Term { slug: string; label: string; image?: string }
+interface Props { categories: Term[] }
+const { categories } = Astro.props;
+
+// Curated editorial imagery per top-level category (falls back to Unsplash collection).
+const fallback: Record<string, string> = {
+	apparel: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=1200&h=1400&fit=crop",
+	home: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=1200&h=1400&fit=crop",
+	accessories: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=1200&h=1400&fit=crop",
+};
+---
+<div class="cat-grid">
+	{categories.map((c) => (
+		<a class="cat-card fade-in" href={`/category/${c.slug}`}>
+			<img src={c.image || fallback[c.slug] || fallback.apparel} alt={c.label} loading="lazy" />
+			<div class="cat-card-body">
+				<h3>{c.label}</h3>
+				<span>Shop the edit &rarr;</span>
+			</div>
+		</a>
+	))}
+</div>

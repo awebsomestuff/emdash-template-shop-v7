@@ -1,0 +1,25 @@
+---
+// Decorative newsletter form — no backend.
+---
+<section class="newsletter">
+	<div class="container-narrow">
+		<span class="eyebrow" style="color: rgba(255,255,255,0.6)">Journal</span>
+		<h2>New arrivals, quietly delivered.</h2>
+		<p>Join the list for seasonal drops, studio notes, and occasional discounts. No spam, unsubscribe anytime.</p>
+		<form id="newsletter-form" onsubmit="return false;">
+			<input type="email" placeholder="you@example.com" aria-label="Email address" required />
+			<button type="submit">Subscribe &rarr;</button>
+		</form>
+		<div class="msg" id="newsletter-msg"></div>
+	</div>
+</section>
+<script is:inline>
+	document.getElementById('newsletter-form')?.addEventListener('submit', function (e) {
+		e.preventDefault();
+		var msg = document.getElementById('newsletter-msg');
+		var input = this.querySelector('input');
+		if (!input || !input.value) return;
+		if (msg) msg.textContent = 'Thanks — check your inbox to confirm. (Demo only)';
+		input.value = '';
+	});
+</script>

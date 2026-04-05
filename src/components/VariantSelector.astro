@@ -1,0 +1,85 @@
+---
+interface Tag { slug: string; label: string }
+interface Props {
+	tags: Tag[];
+}
+const { tags } = Astro.props;
+
+const sizes = tags.filter((t) => t.slug.startsWith("size-"));
+const colors = tags.filter((t) => t.slug.startsWith("color-"));
+
+const colorMap: Record<string, string> = {
+	"color-black": "#111111",
+	"color-white": "#F5F2EA",
+	"color-beige": "#D6C7A8",
+	"color-terracotta": "#A8624A",
+	"color-stone": "#B2AA9A",
+	"color-charcoal": "#3A3735",
+};
+
+// If the product has no size/color tags, show a default set so the UI still communicates shop UX.
+const displaySizes = sizes.length > 0 ? sizes : [
+	{ slug: "size-s", label: "S" },
+	{ slug: "size-m", label: "M" },
+	{ slug: "size-l", label: "L" },
+];
+const displayColors = colors.length > 0 ? colors : [];
+---
+<div class="variant-group">
+	<div class="variant-label"><span>Size</span> <b id="variant-size-val">{displaySizes[0]?.label?.replace("Size ", "") || "M"}</b></div>
+	<div class="variant-options" role="radiogroup" aria-label="Size">
+		{displaySizes.map((t, i) => (
+			<button
+				type="button"
+				class="variant-chip"
+				role="radio"
+				aria-pressed={i === 0 ? "true" : "false"}
+				data-group="size"
+				data-value={t.label.replace("Size ", "")}
+			>{t.label.replace("Size ", "")}</button>
+		))}
+	</div>
+</div>
+
+{displayColors.length > 0 && (
+	<div class="variant-group">
+		<div class="variant-label"><span>Color</span> <b id="variant-color-val">{displayColors[0].label}</b></div>
+		<div class="variant-options" role="radiogroup" aria-label="Color">
+			{displayColors.map((t, i) => (
+				<button
+					type="button"
+					class="variant-swatch"
+					role="radio"
+					aria-pressed={i === 0 ? "true" : "false"}
+					data-group="color"
+					data-value={t.label}
+					style={`background: ${colorMap[t.slug] || "#ccc"}`}
+					title={t.label}
+					aria-label={t.label}
+				></button>
+			))}
+		</div>
+	</div>
+)}
+
+<script is:inline>
+	(function () {
+		document.querySelectorAll('.variant-options').forEach(function (grp) {
+			grp.addEventListener('click', function (e) {
+				var btn = e.target.closest('button');
+				if (!btn) return;
+				var group = btn.getAttribute('data-group');
+				var value = btn.getAttribute('data-value');
+				grp.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+				btn.setAttribute('aria-pressed', 'true');
+				if (group === 'size') {
+					var el = document.getElementById('variant-size-val');
+					if (el) el.textContent = value;
+				} else if (group === 'color') {
+					var el2 = document.getElementById('variant-color-val');
+					if (el2) el2.textContent = value;
+				}
+			});
+		});
+	})();
+</script>

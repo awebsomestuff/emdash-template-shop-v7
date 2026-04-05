@@ -1,0 +1,24 @@
+---
+import { Image } from "emdash/ui";
+
+interface Props {
+	eyebrow?: string;
+	title: string;
+	copy: string;
+	ctaHref: string;
+	ctaLabel: string;
+	image: any;
+}
+const { eyebrow, title, copy, ctaHref, ctaLabel, image } = Astro.props;
+---
+<section class="hero container">
+	<div class="hero-copy fade-in">
+		{eyebrow && <span class="eyebrow">{eyebrow}</span>}
+		<h1 set:html={title} />
+		<p>{copy}</p>
+		<a class="btn" href={ctaHref}>{ctaLabel}</a>
+	</div>
+	<div class="hero-media fade-in">
+		{image && <Image image={image} />}
+	</div>
+</section>

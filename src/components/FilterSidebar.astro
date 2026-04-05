@@ -1,0 +1,95 @@
+---
+interface Term { slug: string; label: string; parent?: string | null }
+interface Props {
+	categories: Term[];
+	tags: Term[];
+	active: { category?: string; tag?: string; sort?: string };
+	basePath?: string;
+}
+const { categories, tags, active, basePath = "/shop" } = Astro.props;
+
+// Build a URL preserving other active params.
+function buildHref(overrides: Record<string, string | undefined>) {
+	const params: Record<string, string> = {};
+	if (active.category && overrides.category !== "") params.category = overrides.category ?? active.category;
+	else if (overrides.category) params.category = overrides.category;
+	if (active.tag && overrides.tag !== "") params.tag = overrides.tag ?? active.tag;
+	else if (overrides.tag) params.tag = overrides.tag;
+	if (active.sort && overrides.sort !== "") params.sort = overrides.sort ?? active.sort;
+	else if (overrides.sort) params.sort = overrides.sort;
+	const qs = new URLSearchParams(params).toString();
+	return qs ? `${basePath}?${qs}` : basePath;
+}
+
+// Group tags by prefix (size-, color-, material-)
+const sizeTags = tags.filter((t) => t.slug.startsWith("size-"));
+const colorTags = tags.filter((t) => t.slug.startsWith("color-"));
+const materialTags = tags.filter((t) => t.slug.startsWith("material-"));
+
+const topCategories = categories.filter((c) => !c.parent);
+---
+<aside class="filter-sidebar">
+	<div class="filter-group">
+		<h4>Category</h4>
+		<ul class="filter-list">
+			<li>
+				<a href={buildHref({ category: "" })} class={!active.category ? "active" : ""}>
+					<span>All products</span>
+				</a>
+			</li>
+			{topCategories.map((c) => (
+				<li>
+					<a href={buildHref({ category: c.slug })} class={active.category === c.slug ? "active" : ""}>
+						<span>{c.label}</span>
+					</a>
+				</li>
+			))}
+		</ul>
+	</div>
+
+	{sizeTags.length > 0 && (
+		<div class="filter-group">
+			<h4>Size</h4>
+			<div class="filter-chips">
+				{sizeTags.map((t) => (
+					<a
+						href={buildHref({ tag: active.tag === t.slug ? "" : t.slug })}
+						class={`filter-chip ${active.tag === t.slug ? "active" : ""}`}
+					>{t.label.replace("Size ", "")}</a>
+				))}
+			</div>
+		</div>
+	)}
+
+	{colorTags.length > 0 && (
+		<div class="filter-group">
+			<h4>Color</h4>
+			<div class="filter-chips">
+				{colorTags.map((t) => (
+					<a
+						href={buildHref({ tag: active.tag === t.slug ? "" : t.slug })}
+						class={`filter-chip ${active.tag === t.slug ? "active" : ""}`}
+					>{t.label}</a>
+				))}
+			</div>
+		</div>
+	)}
+
+	{materialTags.length > 0 && (
+		<div class="filter-group">
+			<h4>Material</h4>
+			<div class="filter-chips">
+				{materialTags.map((t) => (
+					<a
+						href={buildHref({ tag: active.tag === t.slug ? "" : t.slug })}
+						class={`filter-chip ${active.tag === t.slug ? "active" : ""}`}
+					>{t.label}</a>
+				))}
+			</div>
+		</div>
+	)}
+
+	{(active.category || active.tag) && (
+		<a class="filter-reset" href={basePath}>Clear all filters &times;</a>
+	)}
+</aside>

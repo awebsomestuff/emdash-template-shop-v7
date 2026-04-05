@@ -1,0 +1,619 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "Kin & Stone — EmDash Shop Template",
+		"description": "A premium editorial shop template for EmDash CMS. Visual catalog and product pages ready to pair with Stripe, Snipcart, or Shopify Buy Buttons.",
+		"author": "EmDash Templates"
+	},
+	"settings": {
+		"title": "Kin & Stone",
+		"tagline": "Essential goods, thoughtfully made"
+	},
+	"collections": [
+		{
+			"slug": "products",
+			"label": "Products",
+			"labelSingular": "Product",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"commentsEnabled": false,
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "price", "label": "Price", "type": "string", "required": true },
+				{ "slug": "compare_at_price", "label": "Compare at price", "type": "string" },
+				{ "slug": "sku", "label": "SKU", "type": "string" },
+				{ "slug": "in_stock", "label": "In stock", "type": "boolean" },
+				{ "slug": "is_featured", "label": "Featured", "type": "boolean" },
+				{ "slug": "short_description", "label": "Short description", "type": "text", "searchable": true },
+				{ "slug": "long_description", "label": "Long description", "type": "portableText", "searchable": true },
+				{ "slug": "featured_image", "label": "Featured image", "type": "image", "required": true },
+				{ "slug": "gallery_1", "label": "Gallery image 2", "type": "image" },
+				{ "slug": "gallery_2", "label": "Gallery image 3", "type": "image" },
+				{ "slug": "gallery_3", "label": "Gallery image 4", "type": "image" }
+			]
+		},
+		{
+			"slug": "pages",
+			"label": "Pages",
+			"labelSingular": "Page",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true }
+			]
+		}
+	],
+	"taxonomies": [
+		{
+			"name": "product_category",
+			"label": "Product Categories",
+			"labelSingular": "Product Category",
+			"hierarchical": true,
+			"collections": ["products"],
+			"terms": [
+				{ "slug": "apparel", "label": "Apparel" },
+				{ "slug": "t-shirts", "label": "T-Shirts", "parent": "apparel" },
+				{ "slug": "outerwear", "label": "Outerwear", "parent": "apparel" },
+				{ "slug": "shirts", "label": "Shirts", "parent": "apparel" },
+				{ "slug": "knitwear", "label": "Knitwear", "parent": "apparel" },
+				{ "slug": "home", "label": "Home" },
+				{ "slug": "ceramics", "label": "Ceramics", "parent": "home" },
+				{ "slug": "textiles", "label": "Textiles", "parent": "home" },
+				{ "slug": "accessories", "label": "Accessories" }
+			]
+		},
+		{
+			"name": "product_tag",
+			"label": "Product Tags",
+			"labelSingular": "Product Tag",
+			"hierarchical": false,
+			"collections": ["products"],
+			"terms": [
+				{ "slug": "size-s", "label": "Size S" },
+				{ "slug": "size-m", "label": "Size M" },
+				{ "slug": "size-l", "label": "Size L" },
+				{ "slug": "size-xl", "label": "Size XL" },
+				{ "slug": "color-black", "label": "Black" },
+				{ "slug": "color-white", "label": "White" },
+				{ "slug": "color-beige", "label": "Beige" },
+				{ "slug": "color-terracotta", "label": "Terracotta" },
+				{ "slug": "color-stone", "label": "Stone" },
+				{ "slug": "color-charcoal", "label": "Charcoal" },
+				{ "slug": "material-linen", "label": "Linen" },
+				{ "slug": "material-cotton", "label": "Cotton" },
+				{ "slug": "material-wool", "label": "Wool" },
+				{ "slug": "material-ceramic", "label": "Ceramic" },
+				{ "slug": "material-leather", "label": "Leather" }
+			]
+		}
+	],
+	"menus": [
+		{
+			"name": "primary",
+			"label": "Primary Navigation",
+			"items": [
+				{ "type": "custom", "label": "Shop", "url": "/shop" },
+				{ "type": "custom", "label": "Apparel", "url": "/category/apparel" },
+				{ "type": "custom", "label": "Home", "url": "/category/home" },
+				{ "type": "custom", "label": "About", "url": "/pages/about" },
+				{ "type": "custom", "label": "Journal", "url": "/pages/journal" }
+			]
+		},
+		{
+			"name": "footer",
+			"label": "Footer Help",
+			"items": [
+				{ "type": "custom", "label": "Shipping & Returns", "url": "/pages/shipping-returns" },
+				{ "type": "custom", "label": "FAQ", "url": "/pages/faq" },
+				{ "type": "custom", "label": "Contact", "url": "/pages/about" },
+				{ "type": "custom", "label": "Demo notice", "url": "/cart" }
+			]
+		}
+	],
+	"widgetAreas": [
+		{
+			"name": "footer",
+			"label": "Footer",
+			"description": "Footer widget area",
+			"widgets": [
+				{
+					"type": "content",
+					"title": "About Kin & Stone",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [{ "_type": "span", "text": "Small-batch essentials for apparel and home. Designed in Lisbon, made responsibly in Portugal and Japan." }]
+						}
+					]
+				}
+			]
+		}
+	],
+	"bylines": [
+		{
+			"id": "byline-studio",
+			"slug": "kin-stone-studio",
+			"displayName": "Kin & Stone Studio"
+		}
+	],
+	"content": {
+		"products": [
+			{
+				"id": "product-1",
+				"slug": "linen-field-shirt",
+				"status": "published",
+				"data": {
+					"title": "Linen Field Shirt",
+					"price": "$98",
+					"sku": "KS-APL-001",
+					"in_stock": true,
+					"is_featured": true,
+					"short_description": "A relaxed boxy shirt cut from heavyweight European linen. Softens beautifully over time.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=1400&h=1750&fit=crop", "alt": "Linen field shirt on hanger", "filename": "linen-field-shirt-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=1400&h=1750&fit=crop", "alt": "Linen field shirt detail", "filename": "linen-field-shirt-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1598961942613-ba897716405b?w=1400&h=1750&fit=crop", "alt": "Linen field shirt worn", "filename": "linen-field-shirt-3.jpg" } },
+					"gallery_3": { "$media": { "url": "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=1400&h=1750&fit=crop", "alt": "Linen field shirt folded", "filename": "linen-field-shirt-4.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Our Linen Field Shirt is cut from 240gsm European linen that's been washed and tumbled for a lived-in hand from the first wear. The relaxed boxy silhouette is generous through the body with slightly dropped shoulders." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Made to soften" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Each shirt is constructed in a family-run atelier outside Porto, with French-seamed sides and real horn buttons sourced from a small Italian supplier." }] },
+						{ "_type": "block", "style": "blockquote", "children": [{ "_type": "span", "text": "Linen is the only fabric that truly gets better with age. Ours is designed to be a quiet constant in your wardrobe." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["shirts"],
+					"product_tag": ["size-m", "color-beige", "material-linen"]
+				}
+			},
+			{
+				"id": "product-2",
+				"slug": "stone-crewneck-sweater",
+				"status": "published",
+				"data": {
+					"title": "Stone Crewneck Sweater",
+					"price": "$148",
+					"sku": "KS-APL-002",
+					"in_stock": true,
+					"is_featured": true,
+					"short_description": "Mid-weight merino knit with a clean ribbed neck. Warm enough for winter, light enough for spring.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=1400&h=1750&fit=crop", "alt": "Stone crewneck sweater", "filename": "stone-crewneck-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=1400&h=1750&fit=crop", "alt": "Stone crewneck sweater detail", "filename": "stone-crewneck-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=1400&h=1750&fit=crop", "alt": "Sweater knit detail", "filename": "stone-crewneck-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Knit in Japan from 100% responsibly-sourced extrafine merino, this crewneck is our most refined piece. Structured enough to layer cleanly, soft enough to wear against the skin." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Quiet craft" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The gauge is tight, the shoulders are set, and the ribbing is deep — details that only reveal themselves after the hundredth wear." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["knitwear"],
+					"product_tag": ["size-m", "color-stone", "material-wool"]
+				}
+			},
+			{
+				"id": "product-3",
+				"slug": "essential-cotton-tee",
+				"status": "published",
+				"data": {
+					"title": "Essential Cotton Tee",
+					"price": "$42",
+					"sku": "KS-APL-003",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "Heavyweight Pima cotton tee in a box cut. The wardrobe staple we wear nearly every day.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1400&h=1750&fit=crop", "alt": "White cotton t-shirt", "filename": "essential-tee-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=1400&h=1750&fit=crop", "alt": "Cotton tee folded", "filename": "essential-tee-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1622445275576-721325763afe?w=1400&h=1750&fit=crop", "alt": "Cotton tee on hanger", "filename": "essential-tee-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "A proper white tee is surprisingly difficult to get right. Ours uses 6.5oz long-staple Pima cotton with a rib-knit neck that won't warp in the wash, cut in a clean boxy silhouette." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "The everyday test" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "We wore the prototype for 90 days straight before putting it into production. It's held its shape, its colour, and its collar." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["t-shirts"],
+					"product_tag": ["size-m", "color-white", "material-cotton"]
+				}
+			},
+			{
+				"id": "product-4",
+				"slug": "overdyed-wool-coat",
+				"status": "published",
+				"data": {
+					"title": "Overdyed Wool Coat",
+					"price": "$398",
+					"compare_at_price": "$478",
+					"sku": "KS-APL-004",
+					"in_stock": true,
+					"is_featured": true,
+					"short_description": "A long single-breasted coat in Italian wool, overdyed in small batches for a deep, uneven charcoal.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=1400&h=1750&fit=crop", "alt": "Charcoal wool overcoat", "filename": "wool-coat-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1548624313-0396c75e4b1a?w=1400&h=1750&fit=crop", "alt": "Wool coat detail", "filename": "wool-coat-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=1400&h=1750&fit=crop", "alt": "Wool coat worn", "filename": "wool-coat-3.jpg" } },
+					"gallery_3": { "$media": { "url": "https://images.unsplash.com/photo-1606335375944-85f19cb53eca?w=1400&h=1750&fit=crop", "alt": "Wool coat lapel detail", "filename": "wool-coat-4.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The coat we return to every winter. Cut from 800gsm Italian melton wool in a long, uncluttered silhouette with set-in sleeves, a full canvas construction, and genuine horn buttons." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Overdyed in small batches" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Each piece is overdyed after construction, which yields a deep, slightly uneven charcoal that mellows further with wear. No two coats are identical." }] },
+						{ "_type": "block", "style": "blockquote", "children": [{ "_type": "span", "text": "Buy once, wear forever. This is the coat we'd keep if we could only keep one." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["outerwear"],
+					"product_tag": ["size-l", "color-charcoal", "material-wool"]
+				}
+			},
+			{
+				"id": "product-5",
+				"slug": "breton-stripe-tee",
+				"status": "published",
+				"data": {
+					"title": "Breton Stripe Tee",
+					"price": "$54",
+					"sku": "KS-APL-005",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "A classic Breton in heavyweight cotton jersey, knit in a historic mill in western France.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=1400&h=1750&fit=crop", "alt": "Breton striped shirt", "filename": "breton-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=1400&h=1750&fit=crop", "alt": "Breton striped shirt detail", "filename": "breton-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1583744946564-b52d01a7b321?w=1400&h=1750&fit=crop", "alt": "Breton tee worn", "filename": "breton-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The Breton is the oldest striped shirt in fashion — originally issued to French sailors in 1858 for visibility at sea. Ours stays faithful to the original proportions with a boat neck and three-quarter sleeves." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Woven in France" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Produced in a 150-year-old mill in western France that still uses circular looms for a genuinely seamless body — no side seams, ever." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["t-shirts"],
+					"product_tag": ["size-m", "color-black", "color-white", "material-cotton"]
+				}
+			},
+			{
+				"id": "product-6",
+				"slug": "linen-everyday-trousers",
+				"status": "published",
+				"data": {
+					"title": "Linen Everyday Trousers",
+					"price": "$128",
+					"sku": "KS-APL-006",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "A straight-legged linen trouser with a single pleat. Equally at home with sandals or boots.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=1400&h=1750&fit=crop", "alt": "Linen trousers", "filename": "linen-trousers-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=1400&h=1750&fit=crop", "alt": "Linen trousers detail", "filename": "linen-trousers-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=1400&h=1750&fit=crop", "alt": "Linen trousers worn", "filename": "linen-trousers-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "A quiet trouser built for ten-thousand wears. Cut from 260gsm Italian linen with a single front pleat, a clean straight leg, and a gently curved waistband that sits at the natural waist." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Built for movement" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Generous in the thigh, tapered cleanly to the ankle. A hidden button fly, horn buttons, and full linen pocketing throughout." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["apparel"],
+					"product_tag": ["size-m", "color-beige", "material-linen"]
+				}
+			},
+			{
+				"id": "product-7",
+				"slug": "waffle-knit-henley",
+				"status": "published",
+				"data": {
+					"title": "Waffle Knit Henley",
+					"price": "$68",
+					"sku": "KS-APL-007",
+					"in_stock": false,
+					"is_featured": false,
+					"short_description": "A textural waffle henley in a warm beige, cut long with three horn buttons at the placket.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=1400&h=1750&fit=crop", "alt": "Waffle knit henley", "filename": "henley-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=1400&h=1750&fit=crop", "alt": "Henley detail", "filename": "henley-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=1400&h=1750&fit=crop", "alt": "Henley worn", "filename": "henley-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "A dense waffle knit that sits somewhere between a tee and a sweater. Ours is cut from 100% organic cotton with a three-button placket and flat-locked seams." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Texture for the in-between days" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The waffle traps air just enough to add warmth without weight — ideal for the shoulder seasons when a sweater is too much and a tee is too little." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["t-shirts"],
+					"product_tag": ["size-l", "color-beige", "material-cotton"]
+				}
+			},
+			{
+				"id": "product-8",
+				"slug": "hand-loomed-scarf",
+				"status": "published",
+				"data": {
+					"title": "Hand-Loomed Wool Scarf",
+					"price": "$88",
+					"sku": "KS-ACC-001",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "A long brushed-wool scarf in terracotta, hand-loomed by a cooperative in Nepal.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=1400&h=1750&fit=crop", "alt": "Terracotta wool scarf", "filename": "scarf-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1601924582970-9238bcb495d9?w=1400&h=1750&fit=crop", "alt": "Wool scarf detail", "filename": "scarf-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1606293926075-69a00dbfde81?w=1400&h=1750&fit=crop", "alt": "Scarf folded", "filename": "scarf-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Hand-loomed from highland wool by a women-led cooperative outside Kathmandu, then brushed twice for an impossibly soft hand. 200cm long, wide enough to wrap twice." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Made by hand" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Each scarf takes roughly six hours to weave. You'll find small irregularities in the weave — these are the signature of the hand, not flaws." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["accessories"],
+					"product_tag": ["color-terracotta", "material-wool"]
+				}
+			},
+			{
+				"id": "product-9",
+				"slug": "merino-beanie",
+				"status": "published",
+				"data": {
+					"title": "Merino Watch Beanie",
+					"price": "$48",
+					"sku": "KS-ACC-002",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "A classic ribbed watch cap in fine merino, with a deep cuff and a weightless feel.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=1400&h=1750&fit=crop", "alt": "Charcoal merino beanie", "filename": "beanie-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1511231683436-44b3d5a1e51d?w=1400&h=1750&fit=crop", "alt": "Beanie detail", "filename": "beanie-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1465465220129-c73329190b7e?w=1400&h=1750&fit=crop", "alt": "Beanie worn", "filename": "beanie-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Knit from 17-micron Australian merino in an Italian mill that's been making hats since 1907. Tight enough to hold its shape, light enough to fold into a pocket." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "The only beanie you need" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "A 10cm cuff means it sits cleanly above the ear or pulls down over it. A classic profile that won't look dated in five years or fifty." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["accessories"],
+					"product_tag": ["color-charcoal", "material-wool"]
+				}
+			},
+			{
+				"id": "product-10",
+				"slug": "oversized-oxford-shirt",
+				"status": "published",
+				"data": {
+					"title": "Oversized Oxford Shirt",
+					"price": "$118",
+					"compare_at_price": "$138",
+					"sku": "KS-APL-008",
+					"in_stock": true,
+					"is_featured": true,
+					"short_description": "An oxford cloth shirt reimagined in a relaxed boyfriend cut. Button-down collar, single pocket.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=1400&h=1750&fit=crop", "alt": "White oxford shirt", "filename": "oxford-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=1400&h=1750&fit=crop", "alt": "Oxford shirt detail", "filename": "oxford-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1598961942613-ba897716405b?w=1400&h=1750&fit=crop", "alt": "Oxford shirt worn", "filename": "oxford-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The oxford shirt, loosened up. Cut from American-grown Supima woven in Japan, with a soft-roll button-down collar and a single patch pocket. Drop-shoulder, generous through the body, long enough to wear loose or tucked." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Gets better with washing" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The oxford weave creates a subtle two-tone texture that softens visibly after each wash. Expect it to become your favourite shirt by month three." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["shirts"],
+					"product_tag": ["size-l", "color-white", "material-cotton"]
+				}
+			},
+			{
+				"id": "product-11",
+				"slug": "stone-ceramic-mug",
+				"status": "published",
+				"data": {
+					"title": "Stone Ceramic Mug",
+					"price": "$28",
+					"sku": "KS-HOM-001",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "A heavy, hand-thrown stoneware mug with a matte stone glaze. Holds a generous 300ml.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=1400&h=1750&fit=crop", "alt": "Stone ceramic mug", "filename": "mug-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1518057111178-44a106bad636?w=1400&h=1750&fit=crop", "alt": "Mug detail", "filename": "mug-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1520304401437-6c91acf1e5a5?w=1400&h=1750&fit=crop", "alt": "Mug with coffee", "filename": "mug-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Hand-thrown in a small studio in Seto, Japan — the oldest pottery town in the country. Each mug is wheel-thrown, dried, bisque-fired, glazed by hand in a pale stone matte, then fired a second time to cone 10." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "No two alike" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Slight variations in glaze and weight are expected and welcome. These are the marks of a piece made by hand, not a machine." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["ceramics"],
+					"product_tag": ["color-stone", "material-ceramic"]
+				}
+			},
+			{
+				"id": "product-12",
+				"slug": "small-batch-ceramic-vase",
+				"status": "published",
+				"data": {
+					"title": "Small-Batch Ceramic Vase",
+					"price": "$78",
+					"sku": "KS-HOM-002",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "A quietly elegant stoneware vase finished in an ivory matte. 22cm tall, narrow at the neck.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1400&h=1750&fit=crop", "alt": "Ceramic vase", "filename": "vase-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1612196808214-b40b53a64ac7?w=1400&h=1750&fit=crop", "alt": "Vase detail", "filename": "vase-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1582561424557-058531139153?w=1400&h=1750&fit=crop", "alt": "Vase styled", "filename": "vase-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Wheel-thrown in a studio in the Alentejo region of Portugal, then glazed in a custom ivory matte developed over the past three years. The narrow neck is sized to hold a single stem — ours is built for restraint, not excess." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "A quiet presence" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Weighty in the hand, cool to the touch, and finished with an unglazed foot ring that won't scratch wood surfaces." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["ceramics"],
+					"product_tag": ["color-beige", "material-ceramic"]
+				}
+			},
+			{
+				"id": "product-13",
+				"slug": "linen-throw-blanket",
+				"status": "published",
+				"data": {
+					"title": "Heavyweight Linen Throw",
+					"price": "$168",
+					"compare_at_price": "$198",
+					"sku": "KS-HOM-003",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "A generous 140x200cm linen throw in terracotta, woven in Lithuania from European flax.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1400&h=1750&fit=crop", "alt": "Terracotta linen throw", "filename": "throw-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1615800098779-1be32e60cca3?w=1400&h=1750&fit=crop", "alt": "Linen throw folded", "filename": "throw-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1400&h=1750&fit=crop", "alt": "Linen throw styled", "filename": "throw-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "A proper heavyweight throw for the sofa or the bed. Woven in Lithuania from 100% European flax in a deep earthy terracotta, with mitred corners and a fringe-free selvedge edge." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Made to outlast trends" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Linen softens and deepens in color over years of use. We expect this piece to be in your home for a decade or more." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["textiles"],
+					"product_tag": ["color-terracotta", "material-linen"]
+				}
+			},
+			{
+				"id": "product-14",
+				"slug": "washed-linen-pillow",
+				"status": "published",
+				"data": {
+					"title": "Washed Linen Pillow",
+					"price": "$62",
+					"sku": "KS-HOM-004",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "A 50x50cm washed-linen pillow cover with hidden YKK zip. Sold as a cover — insert available separately.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1400&h=1750&fit=crop", "alt": "Stone linen pillow", "filename": "pillow-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1400&h=1750&fit=crop", "alt": "Pillow on sofa", "filename": "pillow-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1400&h=1750&fit=crop", "alt": "Pillow texture", "filename": "pillow-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Cut from the same 240gsm Italian linen as our field shirt. Pre-washed three times for a lived-in hand, with a hidden YKK zip along the bottom edge and French seams throughout." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Simple, repairable" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Designed to be machine-washed, line-dried, and — if ever needed — mended by hand. Everything should be this simple." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["textiles"],
+					"product_tag": ["color-stone", "material-linen"]
+				}
+			},
+			{
+				"id": "product-15",
+				"slug": "earthenware-dinner-plate",
+				"status": "published",
+				"data": {
+					"title": "Earthenware Dinner Plate",
+					"price": "$38",
+					"sku": "KS-HOM-005",
+					"in_stock": false,
+					"is_featured": false,
+					"short_description": "A 26cm dinner plate in charcoal earthenware with a softly raised rim. Sold individually.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=1400&h=1750&fit=crop", "alt": "Charcoal dinner plate", "filename": "plate-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1603199506016-b9a594b593c0?w=1400&h=1750&fit=crop", "alt": "Plate stacked", "filename": "plate-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1584274463697-62c04c2d85b3?w=1400&h=1750&fit=crop", "alt": "Plate on table", "filename": "plate-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Thrown from a black stoneware clay body by a small studio in the Algarve. The charcoal matte glaze is custom-blended and fired to full vitrification — dishwasher and microwave safe, despite the handmade look." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Made in small runs" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Each batch is limited to what the studio can produce in a month. If it's sold out, the next run is never more than a few weeks away." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["ceramics"],
+					"product_tag": ["color-charcoal", "material-ceramic"]
+				}
+			},
+			{
+				"id": "product-16",
+				"slug": "leather-tote-bag",
+				"status": "published",
+				"data": {
+					"title": "Everyday Leather Tote",
+					"price": "$198",
+					"sku": "KS-ACC-003",
+					"in_stock": true,
+					"is_featured": false,
+					"short_description": "A minimal unlined tote in vegetable-tanned Italian leather. Ages from honey to deep chestnut.",
+					"featured_image": { "$media": { "url": "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=1400&h=1750&fit=crop", "alt": "Black leather tote bag", "filename": "tote-1.jpg" } },
+					"gallery_1": { "$media": { "url": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=1400&h=1750&fit=crop", "alt": "Leather tote detail", "filename": "tote-2.jpg" } },
+					"gallery_2": { "$media": { "url": "https://images.unsplash.com/photo-1590739225497-56c76deabbfd?w=1400&h=1750&fit=crop", "alt": "Leather tote carried", "filename": "tote-3.jpg" } },
+					"long_description": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "An unlined, unstructured tote cut from a single piece of 3mm vegetable-tanned Tuscan leather. Hand-stitched straps with solid brass rivets — no plastic anywhere." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Ages with you" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Vegetable tanning means the leather will develop a rich patina with use. After a year it'll look nothing like the bag you unboxed — and that's the point." }] },
+						{ "_type": "block", "style": "blockquote", "children": [{ "_type": "span", "text": "A good bag shouldn't announce itself. It should just be there, every day, doing its job beautifully." }] }
+					]
+				},
+				"taxonomies": {
+					"product_category": ["accessories"],
+					"product_tag": ["color-black", "material-leather"]
+				}
+			}
+		],
+		"pages": [
+			{
+				"id": "page-about",
+				"slug": "about",
+				"status": "published",
+				"data": {
+					"title": "About Kin & Stone",
+					"content": [
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Quiet goods for everyday use" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Kin & Stone is a small design studio based in Lisbon, Portugal. We make a tight collection of apparel and home goods in natural fibers, working with a handful of workshops we know personally." }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "We believe in fewer, better things — made honestly, priced fairly, and designed to last for years rather than seasons. Our collection grows slowly on purpose." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "How we work" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Every piece we sell is developed with a specific maker — a family atelier outside Porto, a 150-year-old mill in France, a ceramics studio in Seto, Japan. We visit regularly. We pay fairly. We don't rush." }] },
+						{ "_type": "block", "style": "blockquote", "children": [{ "_type": "span", "text": "Good design is as little design as possible. We try to live by this." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Demo template notice" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "This site is a demonstration of the Kin & Stone shop template for EmDash CMS. The cart and checkout are decorative — connect your own payment provider to enable real transactions." }] }
+					]
+				}
+			},
+			{
+				"id": "page-shipping-returns",
+				"slug": "shipping-returns",
+				"status": "published",
+				"data": {
+					"title": "Shipping & Returns",
+					"content": [
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Shipping" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "We ship worldwide from our studio in Lisbon. Orders are packed within two business days and shipped via tracked services. Free standard shipping on orders over $120 within the EU and US." }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Standard EU delivery takes 3–6 business days. International delivery takes 5–10 business days, subject to customs. We ship in 100% recycled, plastic-free packaging." }] },
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Returns" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Not quite right? You have 30 days from delivery to return unworn items in their original packaging for a full refund or exchange. We cover return shipping within the EU; international returns are the customer's responsibility." }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "To start a return, email us at studio@kinandstone.example with your order number. Sale items can be exchanged but are final sale." }] }
+					]
+				}
+			},
+			{
+				"id": "page-faq",
+				"slug": "faq",
+				"status": "published",
+				"data": {
+					"title": "Frequently Asked Questions",
+					"content": [
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Where is Kin & Stone made?" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Apparel is made primarily in Portugal, with select pieces knit in Italy and Japan. Ceramics are thrown in Japan and Portugal. Leather goods are made in Tuscany, Italy." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "How should I care for linen?" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Machine wash cold on a gentle cycle, line dry if possible. A warm iron works if you prefer a crisper look, but linen's natural wrinkle is part of its charm." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Do you restock sold-out items?" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Most core pieces are restocked within 4–8 weeks. Limited editions are produced once and never repeated. Sign up for restock notifications on the product page." }] },
+						{ "_type": "block", "style": "h3", "children": [{ "_type": "span", "text": "Is this a real store?" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Kin & Stone is the demo brand for the EmDash Shop template. The cart is decorative and no real payments are processed. If you're building your own store on this template, connect a payment provider (Stripe, Snipcart, or Shopify Buy Buttons) to enable checkout." }] }
+					]
+				}
+			},
+			{
+				"id": "page-journal",
+				"slug": "journal",
+				"status": "published",
+				"data": {
+					"title": "Studio Journal",
+					"content": [
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Notes from the studio" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "A slower record of what we're working on, what we're reading, and the makers we're visiting. Updated when we have something worth saying." }] },
+						{ "_type": "block", "style": "blockquote", "children": [{ "_type": "span", "text": "We'd rather publish once a month about something that matters than every day about nothing in particular." }] }
+					]
+				}
+			}
+		]
+	}
+}

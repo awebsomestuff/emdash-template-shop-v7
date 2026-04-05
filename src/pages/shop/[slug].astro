@@ -1,0 +1,170 @@
+---
+import { getEmDashEntry, getEntryTerms, getSeoMeta, getSiteSettings, getEmDashCollection } from "emdash";
+import { Image, PortableText } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import ProductGallery from "../../components/ProductGallery.astro";
+import VariantSelector from "../../components/VariantSelector.astro";
+import AddToCartButton from "../../components/AddToCartButton.astro";
+import ProductCard from "../../components/ProductCard.astro";
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect("/404");
+
+const { entry: product, cacheHint } = await getEmDashEntry("products", slug);
+if (!product) return Astro.redirect("/404");
+Astro.cache.set(cacheHint);
+
+const settings = await getSiteSettings();
+const siteTitle = settings?.title || "Kin & Stone";
+
+const seo = getSeoMeta(product, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: `/shop/${slug}`,
+});
+
+const categories = ((await getEntryTerms("products", product.data.id, "product_category")) || []) as any[];
+const tags = ((await getEntryTerms("products", product.data.id, "product_tag")) || []) as any[];
+const primaryCategory = categories[0];
+
+const images = [
+	product.data.featured_image,
+	product.data.gallery_1,
+	product.data.gallery_2,
+	product.data.gallery_3,
+].filter(Boolean);
+
+const hasSale = product.data.compare_at_price && product.data.compare_at_price !== product.data.price;
+const soldOut = product.data.in_stock === false;
+
+// Related products: same category, exclude current, limit 4
+let related: any[] = [];
+if (primaryCategory) {
+	const { entries } = await getEmDashCollection("products", {
+		status: "published",
+		where: { product_category: primaryCategory.slug },
+		limit: 8,
+	});
+	related = entries.filter((e: any) => e.id !== product.id).slice(0, 4);
+}
+
+const materialTag = tags.find((t: any) => t.slug.startsWith("material-"));
+---
+<Base
+	title={seo.title || product.data.title}
+	description={seo.description}
+	image={seo.ogImage || product.data.featured_image?.src}
+	content={{ collection: "products", id: product.data.id, slug }}
+	pageType="product"
+>
+	<div class="container">
+		<nav class="crumbs" aria-label="Breadcrumb">
+			<a href="/">Home</a>
+			<span class="sep">/</span>
+			<a href="/shop">Shop</a>
+			{primaryCategory && (
+				<>
+					<span class="sep">/</span>
+					<a href={`/category/${primaryCategory.slug}`}>{primaryCategory.label}</a>
+				</>
+			)}
+			<span class="sep">/</span>
+			<span>{product.data.title}</span>
+		</nav>
+
+		<div class="product-detail">
+			<div>
+				<ProductGallery images={images} alt={product.data.title} />
+			</div>
+
+			<div class="product-info">
+				{primaryCategory && (
+					<a href={`/category/${primaryCategory.slug}`} class="cat-link">{primaryCategory.label}</a>
+				)}
+				<h1 {...product.edit.title}>{product.data.title}</h1>
+
+				<div class="product-price-row">
+					<span class="product-price" {...product.edit.price}>{product.data.price}</span>
+					{hasSale && <span class="product-compare">{product.data.compare_at_price}</span>}
+					{hasSale && <span class="product-sale-badge">Sale</span>}
+					{soldOut && <span class="product-sale-badge" style="background: var(--color-ink)">Sold out</span>}
+				</div>
+
+				{product.data.short_description && (
+					<p class="product-short" {...product.edit.short_description}>{product.data.short_description}</p>
+				)}
+
+				<VariantSelector tags={tags} />
+
+				<AddToCartButton
+					id={product.id}
+					title={product.data.title}
+					price={product.data.price}
+					image={product.data.featured_image?.src}
+					disabled={soldOut}
+				/>
+
+				<div class="product-tabs">
+					<div class="tab-nav" role="tablist">
+						<button role="tab" aria-selected="true" data-tab="desc">Description</button>
+						<button role="tab" aria-selected="false" data-tab="details">Details</button>
+						<button role="tab" aria-selected="false" data-tab="shipping">Shipping</button>
+					</div>
+					<div class="tab-panel is-active" data-panel="desc">
+						{product.data.long_description && (
+							<PortableText value={product.data.long_description} />
+						)}
+					</div>
+					<div class="tab-panel" data-panel="details">
+						<dl>
+							{product.data.sku && (<><dt>SKU</dt><dd>{product.data.sku}</dd></>)}
+							{materialTag && (<><dt>Material</dt><dd>{materialTag.label}</dd></>)}
+							<dt>Stock</dt><dd>{soldOut ? "Currently unavailable" : "In stock, ships within 2 business days"}</dd>
+							<dt>Care</dt><dd>Hand wash cold, lay flat to dry. Avoid bleach.</dd>
+							<dt>Origin</dt><dd>Designed in Lisbon. Made in Portugal.</dd>
+						</dl>
+					</div>
+					<div class="tab-panel" data-panel="shipping">
+						<h3>Free shipping over $120</h3>
+						<p>Standard shipping is 3–6 business days within the EU, 5–10 worldwide. Every order ships in recycled, plastic-free packaging.</p>
+						<h3>30-day returns</h3>
+						<p>Not quite right? Return unworn items within 30 days for a full refund or exchange. We cover return shipping within the EU.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{related.length > 0 && (
+			<section class="section">
+				<div class="section-head">
+					<div>
+						<span class="eyebrow">You might also like</span>
+						<h2>More from {primaryCategory?.label || "the shop"}</h2>
+					</div>
+					<a href="/shop">View all &rarr;</a>
+				</div>
+				<div class="product-grid">
+					{related.map((r) => <ProductCard product={r} />)}
+				</div>
+			</section>
+		)}
+	</div>
+</Base>
+
+<script is:inline>
+	(function () {
+		var tabs = document.querySelectorAll('[data-tab]');
+		var panels = document.querySelectorAll('[data-panel]');
+		tabs.forEach(function (t) {
+			t.addEventListener('click', function () {
+				var key = t.getAttribute('data-tab');
+				tabs.forEach(function (x) { x.setAttribute('aria-selected', 'false'); });
+				t.setAttribute('aria-selected', 'true');
+				panels.forEach(function (p) {
+					if (p.getAttribute('data-panel') === key) p.classList.add('is-active');
+					else p.classList.remove('is-active');
+				});
+			});
+		});
+	})();
+</script>

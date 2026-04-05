@@ -1,0 +1,113 @@
+---
+import { getEmDashCollection, getTaxonomyTerms } from "emdash";
+import Base from "../../layouts/Base.astro";
+import ProductGrid from "../../components/ProductGrid.astro";
+import FilterSidebar from "../../components/FilterSidebar.astro";
+
+const params = Astro.url.searchParams;
+const categorySlug = params.get("category") || undefined;
+const tagSlug = params.get("tag") || undefined;
+const sort = params.get("sort") || "newest";
+const cursor = params.get("cursor") || undefined;
+
+// Load taxonomies for the sidebar
+const categories = ((await getTaxonomyTerms("product_category")) || []) as any[];
+const tags = ((await getTaxonomyTerms("product_tag")) || []) as any[];
+
+// Build the where clause
+const where: Record<string, string> = {};
+if (categorySlug) where.product_category = categorySlug;
+if (tagSlug) where.product_tag = tagSlug;
+
+const { entries: products, nextCursor, cacheHint } = await getEmDashCollection("products", {
+	status: "published",
+	limit: sort === "price-asc" || sort === "price-desc" ? 48 : 12,
+	cursor: sort === "price-asc" || sort === "price-desc" ? undefined : cursor,
+	orderBy: { published_at: "desc" },
+	where: Object.keys(where).length ? where : undefined,
+});
+Astro.cache.set(cacheHint);
+
+// In-memory sort by price (prices are strings like "$48")
+function parsePrice(s?: string) {
+	if (!s) return 0;
+	const n = parseFloat(String(s).replace(/[^0-9.]/g, ""));
+	return isNaN(n) ? 0 : n;
+}
+let sortedProducts = [...products];
+if (sort === "price-asc") {
+	sortedProducts.sort((a: any, b: any) => parsePrice(a.data.price) - parsePrice(b.data.price));
+} else if (sort === "price-desc") {
+	sortedProducts.sort((a: any, b: any) => parsePrice(b.data.price) - parsePrice(a.data.price));
+}
+
+const sortLinks = [
+	{ key: "newest", label: "Newest" },
+	{ key: "price-asc", label: "Price: Low" },
+	{ key: "price-desc", label: "Price: High" },
+];
+function sortHref(key: string) {
+	const p = new URLSearchParams();
+	if (categorySlug) p.set("category", categorySlug);
+	if (tagSlug) p.set("tag", tagSlug);
+	if (key !== "newest") p.set("sort", key);
+	const qs = p.toString();
+	return qs ? `/shop?${qs}` : "/shop";
+}
+function nextHref() {
+	if (!nextCursor) return null;
+	const p = new URLSearchParams();
+	if (categorySlug) p.set("category", categorySlug);
+	if (tagSlug) p.set("tag", tagSlug);
+	if (sort && sort !== "newest") p.set("sort", sort);
+	p.set("cursor", nextCursor);
+	return `/shop?${p.toString()}`;
+}
+---
+<Base title="Shop" description="Browse the full Kin & Stone catalog">
+	<div class="container">
+		<div class="shop-header">
+			<div>
+				<span class="eyebrow">Catalog</span>
+				<h1>Shop everything</h1>
+			</div>
+			<p>{sortedProducts.length} product{sortedProducts.length === 1 ? "" : "s"}</p>
+		</div>
+
+		<div class="shop-layout">
+			<FilterSidebar
+				categories={categories}
+				tags={tags}
+				active={{ category: categorySlug, tag: tagSlug, sort }}
+			/>
+
+			<div>
+				<div class="shop-toolbar">
+					<span class="shop-count">{categorySlug ? `Category: ${categorySlug}` : "All products"}{tagSlug ? ` · ${tagSlug}` : ""}</span>
+					<div class="shop-sort">
+						{sortLinks.map((s) => (
+							<a href={sortHref(s.key)} class={sort === s.key ? "active" : ""}>{s.label}</a>
+						))}
+					</div>
+				</div>
+
+				{sortedProducts.length === 0 ? (
+					<div class="empty-state">
+						<h2>No products match these filters</h2>
+						<p>Try removing a filter or browsing the full catalog.</p>
+						<a class="btn btn-outline" href="/shop">View all products</a>
+					</div>
+				) : (
+					<>
+						<ProductGrid products={sortedProducts} />
+						{sort === "newest" && nextHref() && (
+							<div class="pagination">
+								<a href={nextHref()}>Load more &rarr;</a>
+							</div>
+						)}
+					</>
+				)}
+			</div>
+		</div>
+	</div>
+</Base>

@@ -1,0 +1,11 @@
+---
+import ProductCard from "./ProductCard.astro";
+
+interface Props {
+	products: any[];
+}
+const { products } = Astro.props;
+---
+<div class="product-grid">
+	{products.map((p) => <ProductCard product={p} />)}
+</div>

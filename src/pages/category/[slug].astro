@@ -1,0 +1,73 @@
+---
+import { getTerm, getEmDashCollection, getTaxonomyTerms } from "emdash";
+import Base from "../../layouts/Base.astro";
+import ProductGrid from "../../components/ProductGrid.astro";
+import FilterSidebar from "../../components/FilterSidebar.astro";
+
+const { slug } = Astro.params;
+const term = slug ? await getTerm("product_category", slug) : null;
+if (!term) return Astro.redirect("/404");
+
+const params = Astro.url.searchParams;
+const tagSlug = params.get("tag") || undefined;
+const cursor = params.get("cursor") || undefined;
+
+const { entries: products, nextCursor, cacheHint } = await getEmDashCollection("products", {
+	status: "published",
+	where: { product_category: term.slug, ...(tagSlug ? { product_tag: tagSlug } : {}) },
+	orderBy: { published_at: "desc" },
+	limit: 12,
+	cursor,
+});
+Astro.cache.set(cacheHint);
+
+const categories = ((await getTaxonomyTerms("product_category")) || []) as any[];
+const tags = ((await getTaxonomyTerms("product_tag")) || []) as any[];
+
+function nextHref() {
+	if (!nextCursor) return null;
+	const p = new URLSearchParams();
+	if (tagSlug) p.set("tag", tagSlug);
+	p.set("cursor", nextCursor);
+	return `/category/${term.slug}?${p.toString()}`;
+}
+---
+<Base title={term.label} description={`Shop ${term.label} at Kin & Stone`}>
+	<div class="container">
+		<div class="shop-header">
+			<div>
+				<span class="eyebrow">Category</span>
+				<h1>{term.label}</h1>
+			</div>
+			<p>{products.length} product{products.length === 1 ? "" : "s"}</p>
+		</div>
+
+		<div class="shop-layout">
+			<FilterSidebar
+				categories={categories}
+				tags={tags}
+				active={{ category: term.slug, tag: tagSlug }}
+				basePath={`/category/${term.slug}`}
+			/>
+
+			<div>
+				{products.length === 0 ? (
+					<div class="empty-state">
+						<h2>No products in this category yet</h2>
+						<p>Check back soon — new pieces drop every season.</p>
+						<a class="btn btn-outline" href="/shop">Browse all products</a>
+					</div>
+				) : (
+					<>
+						<ProductGrid products={products} />
+						{nextHref() && (
+							<div class="pagination">
+								<a href={nextHref()}>Load more &rarr;</a>
+							</div>
+						)}
+					</>
+				)}
+			</div>
+		</div>
+	</div>
+</Base>

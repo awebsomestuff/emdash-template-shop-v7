@@ -1,0 +1,54 @@
+---
+import { Image } from "emdash/ui";
+
+interface Props {
+	images: any[];
+	alt: string;
+}
+const { images, alt } = Astro.props;
+const filtered = (images || []).filter(Boolean);
+---
+<div class="product-gallery">
+	<div class="gallery-main" id="gallery-main">
+		{filtered[0] && <Image image={filtered[0]} alt={alt} />}
+	</div>
+	{filtered.length > 1 && (
+		<div class="gallery-thumbs">
+			{filtered.map((img, i) => (
+				<button
+					type="button"
+					class={`gallery-thumb ${i === 0 ? "active" : ""}`}
+					data-src={img?.src}
+					data-alt={img?.alt || alt}
+					aria-label={`View image ${i + 1}`}
+				>
+					<Image image={img} alt={`${alt} — view ${i + 1}`} />
+				</button>
+			))}
+		</div>
+	)}
+</div>
+<script is:inline>
+	(function () {
+		var thumbs = document.querySelectorAll('.gallery-thumb');
+		var main = document.getElementById('gallery-main');
+		if (!main || !thumbs.length) return;
+		var mainImg = main.querySelector('img');
+		thumbs.forEach(function (t) {
+			t.addEventListener('click', function () {
+				var src = t.getAttribute('data-src');
+				var alt = t.getAttribute('data-alt') || '';
+				if (!src || !mainImg) return;
+				mainImg.style.opacity = '0';
+				setTimeout(function () {
+					mainImg.setAttribute('src', src);
+					mainImg.setAttribute('alt', alt);
+					mainImg.removeAttribute('srcset');
+					mainImg.style.opacity = '1';
+				}, 180);
+				thumbs.forEach(function (x) { x.classList.remove('active'); });
+				t.classList.add('active');
+			});
+		});
+	})();
+</script>

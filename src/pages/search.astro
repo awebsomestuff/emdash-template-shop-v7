@@ -1,0 +1,40 @@
+---
+import { search } from "emdash";
+import Base from "../layouts/Base.astro";
+
+const q = Astro.url.searchParams.get("q")?.trim() || "";
+let results: any[] = [];
+if (q) {
+	const res = await search(q, { collections: ["products", "pages"], status: "published", limit: 30 });
+	results = res?.results || [];
+}
+---
+<Base title={q ? `Search: ${q}` : "Search"} description="Search the Kin & Stone catalog">
+	<div class="container">
+		<div class="search-header">
+			<span class="eyebrow">Search</span>
+			<h1>{q ? `Results for "${q}"` : "Search the shop"}</h1>
+			<p>{q ? `${results.length} result${results.length === 1 ? "" : "s"}` : "Type a keyword in the header search."}</p>
+		</div>
+
+		{q && results.length === 0 && (
+			<div class="empty-state">
+				<h2>No results</h2>
+				<p>Try a different keyword, or browse the full catalog.</p>
+				<a class="btn btn-outline" href="/shop">Browse shop</a>
+			</div>
+		)}
+
+		{results.length > 0 && (
+			<ul class="search-results">
+				{results.map((r) => (
+					<li>
+						<span class="eyebrow">{r.collection}</span>
+						<h3><a href={r.collection === "products" ? `/shop/${r.slug}` : `/pages/${r.slug}`}>{r.title}</a></h3>
+						{r.snippet && <p set:html={r.snippet} />}
+					</li>
+				))}
+			</ul>
+		)}
+	</div>
+</Base>
